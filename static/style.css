@@ -1,0 +1,35 @@
+
+.p-title{
+    background-color: #929292;
+}
+
+.title {
+    color: white;
+    text-align: justify;
+    margin-top: 20px;
+    position: absolute;
+    text-shadow: #929292 0.1em 0.1em 0.2em;
+}
+.subtitle {
+    color: white;
+    text-align: justify;
+    margin-top: 70px;
+    position: absolute;
+    text-shadow: #929292 0.1em 0.1em 0.2em;
+}
+.text-part {
+    color: white;
+    text-align: justify;
+    margin-top: 40px;
+}
+.bg-cover {
+    background-image: url('../static/img1.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+.bg-cover img {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
