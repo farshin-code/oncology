@@ -2,3 +2,5 @@ Flask
 tensorflow
 opencv-python
 numpy
+gunicorn
+werkzeug
