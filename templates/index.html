@@ -14,9 +14,11 @@
   </head>
   <body>
     <div class="container">
+        
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">TumorTech AI</a>
+            
+          <a class="navbar-brand fw-bold text-secondary" >TumorTech AI</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -31,51 +33,112 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
-              <a class="nav-link" href="#">Features</a>
-              <a class="nav-link" href="#">Run Model</a>
+              <a class="nav-link" href="#features">Features</a>
+              <a class="nav-link" href="#mri">Run Model</a>
             </div>
           </div>
         </div>
       </nav>
-
+      {% if result %}
+            <div class="alert alert-danger fw-bold" role="alert">
+                {{ result }}
+              </div>
+            {% endif %}
     <div class="row p-title">
         <div class="col-md-6 bg-cover">
-            <h1  class="title">Brain Tumor AI Assistant</h1>
-            <h6  class="subtitle">Detect And Defy</h6>
-
-          <img  class="img-fluid float-end border"   src="{{ url_for('static', filename='survived.png') }}" />
+            <h2 class="title">Brain Tumor/Cancer AI Assistant</h2>
+            <h6 class="subtitle">Detect And Defy</h6>
+            <img class="img-fluid float-end border" src="{{ url_for('static', filename='survived.png') }}" />
         </div>
         <div class="col-md-6 ">
-          <p  class="text-part">
+          <p class="text-part">
             The application serves as a tool for oncologists and other specialists/physicians in the early diagnosis of tumors and cancers. Leveraging advanced algorithms and medical data analysis, it assists healthcare professionals in identifying and diagnosing malignancies at their nascent stages. It plays a pivotal role in enhancing the efficacy of cancer treatment strategies and contributing to better patient care. Its integration into clinical workflows underscores its significance as a valuable resource in the fight against cancer.
           </p>
-          <p  class="text-part">
+          <p class="text-part">
             The application accommodates both MRI and CT images as input, offering flexibility to users. While providing both types of images can enhance output accuracy significantly, it's not mandatory. The software can generate accurate results even with individual images. This adaptability ensures usability across various medical imaging modalities, allowing healthcare professionals to utilize the application effectively in their diagnostic processes. The option to input either MRI or CT images separately underscores the application's versatility and commitment to delivering reliable diagnostic outcomes for brain tumors and cancer.
           </p>
         </div>
     </div>
     <div class="row p-title">
-        <div class="col-md-6 ">
-            <p  class="text-part">
-              The application serves as a tool for oncologists and other specialists/physicians in the early diagnosis of tumors and cancers. Leveraging advanced algorithms and medical data analysis, it assists healthcare professionals in identifying and diagnosing malignancies at their nascent stages. It plays a pivotal role in enhancing the efficacy of cancer treatment strategies and contributing to better patient care. Its integration into clinical workflows underscores its significance as a valuable resource in the fight against cancer.
-            </p>
-            <p  class="text-part">
-              The application accommodates both MRI and CT images as input, offering flexibility to users. While providing both types of images can enhance output accuracy significantly, it's not mandatory. The software can generate accurate results even with individual images. This adaptability ensures usability across various medical imaging modalities, allowing healthcare professionals to utilize the application effectively in their diagnostic processes. The option to input either MRI or CT images separately underscores the application's versatility and commitment to delivering reliable diagnostic outcomes for brain tumors and cancer.
-            </p>
-          </div>
-        <div class="col-md-6 bg-cover">
-            <h1  class="title" style="color:#929292;z-index: 9999;">We Are Here For You</h1>
-            <h6  class="subtitle" style="color:#929292;z-index: 9999;" >Detect And Defy</h6>
-            
+        <div class="col-md-6 d-flex flex-column">
+            <!-- code goes here  -->
+            <script>
+                function runthemodel() {
+                    
+                    document.getElementById("run-btn").innerHTML = "Model Running...";
+                    document.getElementById("run-btn").setAttribute("disabled", "disabled");
 
-          <img  class="img-fluid float-start border" style="max-width:50% ;"   src="{{ url_for('static', filename='survived2.jpg') }}" />
+                    document.getElementById("run-btn2").innerHTML = "Model Running...";
+                    document.getElementById("run-btn2").setAttribute("disabled", "disabled");
+                    
+                }
+                function fileUploadCT() {
+                    document.getElementById("file-upload-ct").click();
+
+                }
+
+                function fileUploadMRI() {
+                    document.getElementById("file-upload-mri").click();
+                }
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    var file_mri = document.getElementById("file-upload-mri");
+
+                    file_mri.addEventListener("change", function(event) {
+                        if (event.target.files.length > 0) {
+                            document.getElementById("mri-btn").setAttribute("disabled", "disabled");
+                            document.getElementById("mri-btn").innerHTML = "File Selected";
+                            document.getElementById("run-btn2").removeAttribute("disabled");
+                        }
+                    });
+
+                    var file_ct = document.getElementById("file-upload-ct");
+
+                    file_ct.addEventListener("change", function(event) {
+                        if (event.target.files.length > 0) {
+                            document.getElementById("ct-btn").setAttribute("disabled", "disabled");
+                            document.getElementById("ct-btn").innerHTML = "File Selected";
+                            document.getElementById("run-btn").removeAttribute("disabled");
+
+                        }
+                    });
+                });
+            </script>
+            <div class="text-part border p-2" id="mri">
+                <h4>Run Model for CT Images</h4>
+                <p>In this section, you can upload CT images to detect brain tumors. The software can generate accurate results even with individual images. This adaptability ensures usability across various medical imaging modalities, allowing healthcare professionals to utilize the application effectively in their diagnostic processes.</p>
+                <form action="/predict-ct" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" hidden id="file-upload-ct" accept="image/*" />
+                    <button id="ct-btn" class="btn btn-primary" type="button" onclick="fileUploadCT()">Upload CT Image</button>
+                    <input  id="run-btn" class="btn btn-success " type="submit" value="Run Model"  disabled />
+                </form>
+            </div>
+            <div class="text-part border p-2">
+                <h4>Run Model for MRI Images</h4>
+                <p>In this section, you can upload MRI images to detect brain tumors. The software can generate accurate results even with individual images.</p>
+                <form action="/predict-mri" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" hidden id="file-upload-mri" accept="image/*" />
+                    <button id="mri-btn" class="btn btn-warning" type="button" onclick="fileUploadMRI()">Upload MRI Image</button>
+                    <input  id="run-btn2"  class="btn btn-info " type="submit" value="Run Model"  disabled />
+                </form>
+            </div>
+            
+              
+            <p class="text-part">
+                <h4 id="features" class="text-part">Application has following features:</h4>
+                <ul class="text-part">
+                    <li>Detect Tumors/Cancers at their nascent stage</li>
+                    <li>Use either CT/MRI images</li>
+                    <li>Provide API for other applications to use</li>
+                </ul>
+            </p>
         </div>
-        
+        <div class="col-md-6 bg-cover">
+            <h1 class="title" style="color:#929292;z-index: 9999;">We Are Here For You</h1>
+            <h6 class="subtitle" style="color:#929292;z-index: 9999;">Detect And Defy</h6>
+            <img class="img-fluid float-start border" style="max-width:50%;" src="{{ url_for('static', filename='survived2.jpg') }}" />
+        </div>
     </div>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>
