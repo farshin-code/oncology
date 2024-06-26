@@ -1,9 +1,9 @@
 # flask app
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
-
 from models.mri import run
 from models.ct import run as run_ct
+import io
 import os
 import random
 
@@ -27,12 +27,8 @@ def predict_mri():
 
     if file:
         filename = secure_filename(file.filename)
-        filePath = os.path.join(
-            f"./temp/{str(random.randint(1000, 1000000))}" + filename
-        )
-        print(filePath)
-        file.save(filePath)
-        return render_template("index.html", result=run(filePath))
+        file_content = file.read()
+        return render_template("index.html", result=run(io.BytesIO(file_content)))
 
 
 @app.route("/predict-ct", methods=["POST"])
@@ -47,12 +43,8 @@ def predict_ct():
 
     if file:
         filename = secure_filename(file.filename)
-        filePath = os.path.join(
-            f"./temp/{str(random.randint(1000, 1000000))}" + filename
-        )
-        print(filePath)
-        file.save(filePath)
-        return render_template("index.html", result=run_ct(filePath))
+        file_content = file.read()
+        return render_template("index.html", result=run_ct(io.BytesIO(file_content)))
 
 
 if __name__ == "__main__":
